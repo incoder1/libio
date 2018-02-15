@@ -11,128 +11,27 @@
 #ifndef __IO_CHARSETS_CVT_HPP_INCLUDED__
 #define __IO_CHARSETS_CVT_HPP_INCLUDED__
 
-#include <cerrno>
-#include <functional>
-#include <system_error>
-#include <locale>
-
-#include "buffer.hpp"
-#include "charsets.hpp"
-#include "object.hpp"
+#include "config.hpp"
 
 #ifdef HAS_PRAGMA_ONCE
 #pragma once
 #endif // HAS_PRAGMA_ONCE
 
-#ifndef iconv_t
-#define iconv_t libiconv_t
-typedef void* iconv_t;
-#endif // iconv_t
+#include <functional>
+#include <system_error>
 
+#include "buffer.hpp"
+#include "charsets.hpp"
+#include "object.hpp"
+
+#ifdef IO_CONV_ENGINE_ICONV
+#	include "posix/iconv_conv_engine.hpp"
+#elif defined( IO_CONV_EGNINE_MSMLANG )
+#	include "win/msmlang_conv_engine.hpp"
+#endif
 
 namespace io {
 
-/// \brief Character set conversation (transcoding) error code
-enum converrc: int {
-	/// conversation was success
-	success = 0,
-
-	/// character code conversion invalid multi-byte sequence
-	invalid_multibyte_sequence = 1,
-
-	/// character code conversion incomplete multi-byte sequence
-	incomplete_multibyte_sequence = 2,
-
-	/// character code conversion no more room i.e. output buffer overflow
-	no_buffer_space = 3,
-
-	/// conversation between character's is not supported
-	not_supported,
-
-	/// An unknown error
-	unknown = -1
-};
-
-class IO_PUBLIC_SYMBOL chconv_error_category final: public std::error_category {
-private:
-#ifndef  _MSC_VER
-	friend std::error_code  make_error_code(io::converrc ec) noexcept;
-	friend std::error_condition  make_error_condition(io::converrc err) noexcept;
-#else
-	friend IO_PUBLIC_SYMBOL std::error_code make_error_code(io::converrc errc) noexcept;
-	friend IO_PUBLIC_SYMBOL std::error_condition make_error_condition(io::converrc err) noexcept;
-#endif
-	static inline const chconv_error_category* instance()
-	{
-		static chconv_error_category _instance;
-		return &_instance;
-	}
-
-	const char* cstr_message(int err_code) const;
-
-public:
-
-	constexpr chconv_error_category() noexcept:
-		error_category()
-	{}
-
-	virtual ~chconv_error_category() = default;
-
-	virtual const char* name() const noexcept override;
-
-	virtual std::error_condition default_error_condition (int err) const noexcept override;
-
-	virtual bool equivalent (const std::error_code& code, int condition) const noexcept override;
-
-	virtual std::string message(int err_code) const override
-	{
-		return std::string(  cstr_message(err_code) );
-	}
-
-};
-
-#ifndef _MSC_VER
-	std::error_code IO_PUBLIC_SYMBOL make_error_code(io::converrc errc) noexcept;
-	std::error_condition  IO_PUBLIC_SYMBOL make_error_condition(io::converrc err) noexcept;
-#else
-	IO_PUBLIC_SYMBOL std::error_code make_error_code(io::converrc errc) noexcept;
-	IO_PUBLIC_SYMBOL std::error_condition make_error_condition(io::converrc err) noexcept;
-#endif
-
-enum class cnvrt_control
-{
-	failure_on_failing_chars,
-	discard_on_failing_chars
-};
-
-
-namespace detail {
-
-class engine {
-public:
-	engine(const engine&) = delete;
-	engine& operator=(const engine&) = delete;
-
-	engine(engine&& other) noexcept;
-	engine& operator=(engine&& rhs) noexcept;
-
-	explicit operator bool() const {
-		return is_open();
-	}
-
-	engine() noexcept;
-	engine(const char* from,const char* to, cnvrt_control control) noexcept;
-	~engine() noexcept;
-
-	inline void swap(engine& other) noexcept;
-	bool is_open() const;
-
-	converrc convert(uint8_t** src,std::size_t& size, uint8_t** dst, std::size_t& avail) const noexcept;
-private:
-	iconv_t iconv_;
-};
-
-} // namespace detail
 
 class IO_PUBLIC_SYMBOL code_cnvtr;
 DECLARE_IPTR(code_cnvtr);
@@ -157,7 +56,6 @@ private:
 	friend class io::nobadalloc<code_cnvtr>;
 public:
 	static s_code_cnvtr open(std::error_code& ec,const charset& from,const charset& to, cnvrt_control conrol) noexcept;
-	static std::error_condition _ok;
 private:
 	detail::engine eng_; // converting engine
 };

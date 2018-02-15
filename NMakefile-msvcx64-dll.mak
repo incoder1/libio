@@ -16,8 +16,6 @@ DEPS_LIBS=$(DEPS_ROOT)\lib\x64
 LIB_NAME=io
 SHARED_EXT=dll
 
-PLATFORM_SHARED_LINK_OPTIONS=
-
 LIBS=msvcrt.lib kernel32.lib user32.lib Ws2_32.lib iconv.dll.lib gnutls.lib 
 INCLUEDS=/Iinclude /Iinclude\win /Iinclude\net /Isrc /I$(DEPS_INCLUDES)
 

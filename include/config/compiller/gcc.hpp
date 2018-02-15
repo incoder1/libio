@@ -128,6 +128,8 @@
 #endif // IO_PUSH_IGNORE_UNUSED_PARAM
 
 
+// #define IO_CONV_ENGINE_ICONV 1
+
 #define io_likely(__expr__) __builtin_expect(!!(__expr__), true)
 #define io_unlikely(__expr__) __builtin_expect(!!(__expr__), false)
 

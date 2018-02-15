@@ -4,6 +4,6 @@ LDPATH=$(ROOT)\target\release-win-msvc-dll-x64
 INCLUDES=$(ROOT)\include
 
 link: compile
-	link /LIBPATH:$(LDPATH) /OUT:xmlparse.exe io.lib main.obj
+	link /LTCG /LIBPATH:$(LDPATH) /OUT:xmlparse.exe io.lib msvcrt.lib main.obj
 compile:
-	cl /c /MT /Ox  /DNDEBUG /DUNICODE /DIO_SHARED_LIB  /I$(INCLUDES) /Fomain.obj  main.cpp
+	cl /c /GL /Zl /Ox /DNDEBUG /DUNICODE /DIO_SHARED_LIB  /I$(INCLUDES) /Fomain.obj  main.cpp

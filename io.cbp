@@ -22,6 +22,7 @@
 					<Add option="-g" />
 					<Add option="-fexceptions" />
 					<Add option="-DIO_BUILD" />
+					<Add option="-DIO_CONV_EGNINE_MSMLANG" />
 					<Add directory="include" />
 					<Add directory="include/net" />
 					<Add directory="include/win" />
@@ -240,6 +241,7 @@
 		<Unit filename="include/posix/hmalloc.hpp">
 			<Option target="debug-unix-gcc-so-x64" />
 		</Unit>
+		<Unit filename="include/posix/iconv_conv_engine.hpp" />
 		<Unit filename="include/posix/posixconf.hpp">
 			<Option target="debug-unix-gcc-so-x64" />
 		</Unit>
@@ -293,6 +295,12 @@
 			<Option target="debug-win-gcc-static-x64" />
 			<Option target="release-win-gcc-static-x64" />
 			<Option target="debug-win-gcc-dll-x64" />
+			<Option target="release-win-gcc-dll-x64" />
+		</Unit>
+		<Unit filename="include/win/msmlang_conv_engine.hpp">
+			<Option target="debug-win-gcc-static-x64" />
+			<Option target="debug-win-gcc-dll-x64" />
+			<Option target="release-win-gcc-static-x64" />
 			<Option target="release-win-gcc-dll-x64" />
 		</Unit>
 		<Unit filename="include/win/sockets.hpp">
@@ -386,6 +394,12 @@
 			<Option target="debug-win-gcc-dll-x64" />
 			<Option target="release-win-gcc-static-x64" />
 			<Option target="debug-win-gcc-static-x64" />
+			<Option target="release-win-gcc-dll-x64" />
+		</Unit>
+		<Unit filename="src/win/msmlang_conv_engine.cpp">
+			<Option target="debug-win-gcc-static-x64" />
+			<Option target="debug-win-gcc-dll-x64" />
+			<Option target="release-win-gcc-static-x64" />
 			<Option target="release-win-gcc-dll-x64" />
 		</Unit>
 		<Unit filename="src/win/sockets.cpp">

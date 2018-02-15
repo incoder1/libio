@@ -18,14 +18,16 @@
 					<Add option="-Wall" />
 					<Add option="-std=c++11" />
 					<Add option="-pg" />
-					<Add option="-g" />
 					<Add option="-Og" />
+					<Add option="-g" />
 					<Add option="-fexceptions" />
+					<Add option="-DIO_CONV_EGNINE_MSMLANG" />
 					<Add directory="../../deps/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg -lgmon" />
 					<Add library="iconv.dll" />
+					<Add library="Ole32" />
 					<Add directory="../../deps/lib" />
 					<Add directory="../../bin/debug-win-gcc-static-x64" />
 				</Linker>

@@ -153,7 +153,7 @@ public:
 	}
 
 	bool operator<(const cached_string& rhs) const noexcept {
-		return data_ < rhs.data_;
+		return traits_type::compare( data(), rhs.data(), rhs.size() ) < 0;
 	}
 
 private:
